@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TwingateConnector Shared Configuration Creates a shared maintenance plan 1`] = `
+{
+  "TwingateConnectorTwingateConnectorSharedConstructPatchDocument5C55E34C": {
+    "Properties": {
+      "Content": {
+        "description": "Install packages from Ubuntu repositories",
+        "mainSteps": [
+          {
+            "action": "aws:runShellScript",
+            "inputs": {
+              "runCommand": [
+                "sudo apt-get update",
+              ],
+            },
+            "name": "updatePackages",
+          },
+          {
+            "action": "aws:runShellScript",
+            "inputs": {
+              "runCommand": [
+                "sudo apt-get install -y twingate-connector",
+              ],
+            },
+            "name": "updateTwingate",
+          },
+          {
+            "action": "aws:runShellScript",
+            "inputs": {
+              "runCommand": [
+                "sudo systemctl restart twingate-connector",
+              ],
+            },
+            "name": "restartTwingate",
+          },
+          {
+            "action": "aws:runShellScript",
+            "inputs": {
+              "runCommand": [
+                "sudo reboot",
+              ],
+            },
+            "name": "reboot",
+            "precondition": {
+              "StringEquals": [
+                "{{ reboot }}",
+                "true",
+              ],
+            },
+          },
+        ],
+        "parameters": {
+          "reboot": {
+            "allowedValues": [
+              "true",
+              "false",
+            ],
+            "type": "String",
+          },
+        },
+        "schemaVersion": "2.2",
+      },
+      "DocumentFormat": "JSON",
+      "DocumentType": "Command",
+      "Name": "TwingateUpdate",
+      "TargetType": "/AWS::EC2::Instance",
+    },
+    "Type": "AWS::SSM::Document",
+  },
+}
+`;
+
+exports[`TwingateConnector Shared Configuration Creates an instance role if one is not provided 1`] = `
+{
+  "Properties": {
+    "AssumeRolePolicyDocument": {
+      "Statement": [
+        {
+          "Action": "sts:AssumeRole",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "ec2.amazonaws.com",
+          },
+        },
+      ],
+      "Version": "2012-10-17",
+    },
+    "ManagedPolicyArns": [
+      "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+      "arn:aws:iam::aws:policy/AmazonSSMPatchAssociation",
+    ],
+    "Policies": [
+      {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "cloudwatch:PutMetricData",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "sns:Publish",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TwingateConnectorInstanceRolePolicy",
+      },
+    ],
+  },
+  "Type": "AWS::IAM::Role",
+}
+`;
