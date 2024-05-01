@@ -52,13 +52,14 @@ export interface TwingateConnectorProps {
   readonly instanceRole?: IRole;
 }
 
-
-interface UserDataProps {
-  twingateUrl: string;
-  secretName: string;
+export interface UserDataProps {
+  readonly twingateUrl: string;
+  readonly secretName: string;
 }
 
 export class TwingateConnector extends Construct {
+
+  public connectorSecurityGroup : ISecurityGroup;
   constructor(scope: Construct, id: string, props: TwingateConnectorProps) {
     super(scope, id);
 
@@ -119,6 +120,7 @@ export class TwingateConnector extends Construct {
       });
     }
 
+    this.connectorSecurityGroup = connectorSecurityGroup;
     new CfnOutput(this, 'TwingateConnectorSecurityGroupNameOutput', {
       value: connectorSecurityGroup.securityGroupId,
     });

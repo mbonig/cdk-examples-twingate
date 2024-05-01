@@ -4,7 +4,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   authorAddress: 'matthew.bonig@gmail.com',
   cdkVersion: '2.132.0',
   defaultReleaseBranch: 'main',
-  jsiiVersion: '~5.0.0',
+  jsiiVersion: '~5.3.0',
   name: 'twingate-connnectors',
   projenrcTs: true,
   repositoryUrl: 'https://github.com/matthew.bonig/twingate-connnectors.git',

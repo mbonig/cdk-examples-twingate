@@ -11,7 +11,7 @@ import { Construct } from 'constructs';
 export interface TwingateConnectorSharedProps {
   vpc?: IVpc;
   instanceRole?: IRole;
-  twingateSecurityGroup?: ISecurityGroup;
+  securityGroup?: ISecurityGroup;
 }
 
 export class TwingateConnectorShared extends Construct {
@@ -28,10 +28,10 @@ export class TwingateConnectorShared extends Construct {
     });
     this.patchDocument = this.createPatchDocument();
 
-    if (!props.twingateSecurityGroup && !props.vpc) {
+    if (!props.securityGroup && !props.vpc) {
       throw new Error('You must provide either a twingateSecurityGroup or a VPC for one to be created in');
     }
-    this.connectorSecurityGroup = props.twingateSecurityGroup ?? new SecurityGroup(this, 'ConnectorSecurityGroup', {
+    this.connectorSecurityGroup = props.securityGroup ?? new SecurityGroup(this, 'ConnectorSecurityGroup', {
       vpc: props.vpc!,
       allowAllOutbound: true,
     });
